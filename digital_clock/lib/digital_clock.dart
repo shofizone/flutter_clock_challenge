@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 enum _Element {
   background,
@@ -76,7 +77,7 @@ class _DigitalClockState extends State<DigitalClock> {
       // Update once per minute. If you want to update every second, use the
       // following code.
       _timer = Timer(
-        Duration(minutes: 1) -
+        Duration(seconds: 1) -
             Duration(seconds: _dateTime.second) -
             Duration(milliseconds: _dateTime.millisecond),
         _updateTime,
@@ -98,31 +99,31 @@ class _DigitalClockState extends State<DigitalClock> {
     final hour =
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
-    final fontSize = MediaQuery.of(context).size.width / 3.5;
+    final second = _dateTime.second;
+    final fontSize = MediaQuery.of(context).size.width / 10;
     final offset = -fontSize / 7;
-    final defaultStyle = TextStyle(
-      color: colors[_Element.text],
-      fontFamily: 'AbrilFatface',
-      fontSize: fontSize,
-      shadows: [
-        Shadow(
-          blurRadius: 10,
-          color: colors[_Element.shadow],
-          offset: Offset(-40, 0),
-        ),
-      ],
-    );
+    final defaultStyle = GoogleFonts.titilliumWeb(
+      fontSize: fontSize,).apply(color: colors[_Element.text],);
 
     return Container(
       color: colors[_Element.background],
       child: DefaultTextStyle(
         style: defaultStyle,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: <Widget>[
-            Text(hour),
-            Text(":"),
-            Text(minute),
+            Container(),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(hour),
+                  Text(":"),
+                  Text(minute),
+                  Text(":"),
+                  Text("$second"),
+                ],
+              ),
+            ),
           ],
         ),
       ),

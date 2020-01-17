@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ClockFace extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.height / 1.1;
@@ -21,9 +20,6 @@ class ClockFace extends StatelessWidget {
                   painter: new ClockDialPainter(),
                 ),
               ),
-
-
-
             ],
           ),
         ),
@@ -35,7 +31,7 @@ class ClockFace extends StatelessWidget {
 class ClockDialPainter extends CustomPainter {
   static const double pi = 3.1415926535897932;
 
-  final hourTickMarkLength = 10.0;
+  final hourTickMarkLength = 15.0;
   final minuteTickMarkLength = 5.0;
 
   final hourTickMarkWidth = 3.0;
@@ -53,7 +49,7 @@ class ClockDialPainter extends CustomPainter {
         ),
         textStyle = const TextStyle(
           color: Colors.black,
-          fontFamily: 'Times New Roman',
+          fontFamily: 'Roboto',
           fontSize: 15.0,
         ) {
     tickPaint.color = Colors.blueGrey;
@@ -75,27 +71,6 @@ class ClockDialPainter extends CustomPainter {
           i % 5 == 0 ? hourTickMarkWidth : minuteTickMarkWidth;
       canvas.drawLine(new Offset(0.0, -radius),
           new Offset(0.0, -radius + tickMarkLength), tickPaint);
-
-      //draw the text
-//      if (i % 5 == 0) {
-//        canvas.save();
-//        canvas.translate(0.0, -radius + 20.0);
-//
-//        textPainter.text = new TextSpan(
-//          text: '${i == 0 ? 12 : i ~/ 5}',
-//          style: textStyle,
-//        );
-//
-//        //helps make the text painted vertically
-//        canvas.rotate(-angle * i);
-//
-//        textPainter.layout();
-//
-//        textPainter.paint(canvas,
-//            new Offset(-(textPainter.width / 2), -(textPainter.height / 2)));
-//
-//        canvas.restore();
-//      }
 
       canvas.rotate(angle);
     }

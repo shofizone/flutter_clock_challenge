@@ -114,8 +114,10 @@ class _AnalogClockState extends State<AnalogClock> {
           );
 
     final time = DateFormat.Hms().format(DateTime.now());
+    final timeAMPM = DateFormat.jm().format(DateTime.now());
+
     final weatherInfo = DefaultTextStyle(
-      style: TextStyle(color: customTheme.primaryColor),
+      style: TextStyle(color: customTheme.primaryColor, fontSize: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -127,6 +129,34 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
     );
 
+    final digiClock = Padding(
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).size.height / 7,
+      ),
+      child: DefaultTextStyle(
+        style: TextStyle(color: customTheme.accentColor, fontSize: 80),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[Text(timeAMPM)],
+        ),
+      ),
+    );
+
+    final date = DateFormat.yMMMMd().format(DateTime.now());
+    final weekday = DateFormat.EEEE().format(DateTime.now());
+    final dateInfo =
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(
+        date,
+        style: TextStyle(color: customTheme.primaryColor, fontSize: 35),
+      ),
+      Text(
+        weekday,
+        style: TextStyle(color: customTheme.primaryColor, fontSize: 45),
+      ),
+    ]);
+
     return Semantics.fromProperties(
       properties: SemanticsProperties(
         label: 'Analog clock with time $time',
@@ -134,59 +164,80 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
       child: Container(
         color: customTheme.backgroundColor,
-        child: Stack(
-          children: [
-            // background
-            ClockFace(),
-
-            ContainerHand(
-              color: Colors.transparent,
-              size: 0.6,
-              angleRadians: _now.hour * radiansPerHour +
-                  (_now.minute / 60) * radiansPerHour,
-              child: Transform.translate(
-                offset: Offset(0.0, -80.0),
-                child: Container(
-                  width: 25,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: customTheme.primaryColor,
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+//                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: dateInfo,
                   ),
-                ),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: weatherInfo,
+                  ),
+                ],
               ),
             ),
+            Expanded(
+              flex: 3,
+              child: Stack(
+                children: [
+                  // clock face
+                  ClockFace(),
 
-            DrawnHand(
-              color: customTheme.highlightColor,
-              thickness: 16,
-              size: 0.85,
-              angleRadians: _now.minute * radiansPerTick,
-            ),
-            DrawnHand(
-              color: customTheme.accentColor,
-              thickness: 4,
-              size: .9,
-              angleRadians: _now.second * radiansPerTick,
-            ),
+                  ContainerHand(
+                    color: Colors.transparent,
+                    size: 0.6,
+                    angleRadians: _now.hour * radiansPerHour +
+                        (_now.minute / 60) * radiansPerHour,
+                    child: Transform.translate(
+                      offset: Offset(0.0, -100.0),
+                      child: Container(
+                        width: 25,
+                        height: 250,
+                        decoration: BoxDecoration(
+                            color: customTheme.primaryColor,
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                  ),
 
-            Positioned(
-              left: 0,
-              bottom: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: weatherInfo,
-              ),
-            ),
+                  DrawnHand(
+                    color: customTheme.highlightColor,
+                    thickness: 16,
+                    size: 0.85,
+                    angleRadians: _now.minute * radiansPerTick,
+                  ),
+                  DrawnHand(
+                    color: customTheme.accentColor,
+                    thickness: 4,
+                    size: .9,
+                    angleRadians: _now.second * radiansPerTick,
+                  ),
 
-            //Center Point
-            new Center(
-              child: new Container(
-                width: 30.0,
-                height: 30.0,
-                decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).primaryColor,
-                ),
+                  //Center Point
+                  new Center(
+                    child: new Container(
+                      width: 30.0,
+                      height: 30.0,
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+
+                  // Digital clock
+                  Center(
+                    child: digiClock,
+                  ),
+                ],
               ),
             ),
           ],

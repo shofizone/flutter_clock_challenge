@@ -4,6 +4,7 @@
 
 import 'dart:io';
 
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter_clock_helper/customizer.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/foundation.dart';
@@ -20,7 +21,6 @@ void main() {
     // https://github.com/flutter/flutter/issues/31366
     // See https://github.com/flutter/flutter/wiki/Desktop-shells#target-platform-override.
     debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
-
   }
 
   // This creates a clock that enables you to customize it.
@@ -32,5 +32,11 @@ void main() {
   //
   // Your job is to edit [AnalogClock], or replace it with your own clock
   // widget. (Look in analog_clock.dart for more details!)
-  runApp(ClockCustomizer((ClockModel model) => AnalogClock(model)));
+//  runApp(ClockCustomizer((ClockModel model) => AnalogClock(model)));
+
+  runApp(DevicePreview(builder: (context) {
+    return ClockCustomizer((ClockModel model) {
+      return AnalogClock(model);
+    });
+  }));
 }

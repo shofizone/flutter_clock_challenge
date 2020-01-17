@@ -5,6 +5,7 @@
 import 'dart:async';
 
 import 'package:analog_clock/clock_face.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -115,6 +116,7 @@ class _AnalogClockState extends State<AnalogClock> {
 
     final time = DateFormat.Hms().format(DateTime.now());
     final timeAMPM = DateFormat.jm().format(DateTime.now());
+    final weekday = DateFormat.EEEE().format(DateTime.now());
 
     final weatherInfo = DefaultTextStyle(
       style: TextStyle(color: customTheme.primaryColor, fontSize: 20),
@@ -129,22 +131,50 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
     );
 
-    final digiClock = Padding(
+    final digiClockNWeekday = Padding(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).size.height / 7,
+        bottom: MediaQuery.of(context).size.height / 7,
       ),
       child: DefaultTextStyle(
-        style: TextStyle(color: customTheme.accentColor, fontSize: 80),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[Text(timeAMPM)],
+        style: TextStyle(
+            color: customTheme.accentColor,
+            fontSize: 80,
+            fontFamily: "Roboto",
+            fontWeight: FontWeight.bold),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+//              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  timeAMPM,
+                  style: TextStyle(
+                    fontSize: 80,
+                  ),
+                )
+              ],
+            ),
+            Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+//              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  weekday.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 50,
+                  ),
+                )
+              ],
+            ),
+          ],
         ),
       ),
     );
 
-    final date = DateFormat.yMMMMd().format(DateTime.now());
-    final weekday = DateFormat.EEEE().format(DateTime.now());
+    final date = DateFormat("MMMM, dd \nyyyy").format(DateTime.now());
     final dateInfo =
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(
@@ -169,7 +199,7 @@ class _AnalogClockState extends State<AnalogClock> {
             Expanded(
               flex: 1,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+//                crossAxisAlignment: CrossAxisAlignment.start,
 //                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
@@ -235,7 +265,7 @@ class _AnalogClockState extends State<AnalogClock> {
 
                   // Digital clock
                   Center(
-                    child: digiClock,
+                    child: digiClockNWeekday,
                   ),
                 ],
               ),

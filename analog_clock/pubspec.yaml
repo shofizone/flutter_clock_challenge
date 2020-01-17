@@ -25,4 +25,15 @@ flutter:
       fonts:
         - asset: assets/fonts/roboto/Roboto-Regular.ttf
 
+    - family: Montserrat Alternates
+      fonts:
+        - asset: assets/fonts/MontserratAlternates/MontserratAlternates-Regular.ttf
+        - asset: assets/fonts/MontserratAlternates/MontserratAlternates-Bold.ttf
+
+    - family: Oxygen
+      fonts:
+        - asset: assets/fonts/Oxygen/Oxygen-Regular.ttf
+        - asset: assets/fonts/Oxygen/Oxygen-Bold.ttf
+
+
 

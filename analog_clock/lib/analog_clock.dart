@@ -117,6 +117,7 @@ class _AnalogClockState extends State<AnalogClock> {
     final time = DateFormat.Hms().format(DateTime.now());
     final timeAMPM = DateFormat.jm().format(DateTime.now());
     final weekday = DateFormat.EEEE().format(DateTime.now());
+    final date = DateFormat.yMMMd().format(DateTime.now());
 
     final weatherInfo = DefaultTextStyle(
       style: TextStyle(color: customTheme.primaryColor, fontSize: 20),
@@ -146,7 +147,6 @@ class _AnalogClockState extends State<AnalogClock> {
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-//              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
                   timeAMPM,
@@ -174,22 +174,18 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
     );
 
-    final date = DateFormat("MMMM, dd \nyyyy").format(DateTime.now());
+
     final dateInfo =
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(
         date,
         style: TextStyle(color: customTheme.primaryColor, fontSize: 35),
       ),
-      Text(
-        weekday,
-        style: TextStyle(color: customTheme.primaryColor, fontSize: 45),
-      ),
     ]);
 
     return Semantics.fromProperties(
       properties: SemanticsProperties(
-        label: 'Analog clock with time $time',
+        label: 'Clock with time $time',
         value: time,
       ),
       child: Container(
@@ -199,14 +195,14 @@ class _AnalogClockState extends State<AnalogClock> {
             Expanded(
               flex: 1,
               child: Column(
-//                crossAxisAlignment: CrossAxisAlignment.start,
-//                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: dateInfo,
                   ),
-                  Spacer(),
+
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: weatherInfo,

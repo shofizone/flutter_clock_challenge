@@ -150,6 +150,7 @@ class _LenovoClockState extends State<LenovoClock> {
           );
 
     final time = DateFormat.Hms().format(DateTime.now());
+    final time24 = DateFormat.Hm().format(DateTime.now());
     final timeAMPM = DateFormat.jm().format(DateTime.now());
     final weekday = DateFormat.EEEE().format(DateTime.now());
     final dateFormed = DateFormat.yMMMd().format(DateTime.now());
@@ -215,7 +216,7 @@ class _LenovoClockState extends State<LenovoClock> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  timeAMPM,
+                  widget.model.is24HourFormat?time24:timeAMPM,
                   style: TextStyle(
                     fontSize: 80,
                   ),

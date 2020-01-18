@@ -168,7 +168,7 @@ class _LenovoClockState extends State<LenovoClock> {
           ),
           Icon(
             weatherIconData(),
-            color: Theme.of(context).primaryColor,
+            color: customTheme.primaryColor,
             size: 100,
           ),
           SizedBox(

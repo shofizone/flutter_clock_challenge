@@ -4,13 +4,14 @@
 
 import 'dart:async';
 
-import 'package:analog_clock/clock_face.dart';
+import 'package:lenovo_clock/clock_face.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:intl/intl.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
+import 'package:weather_icons/weather_icons.dart';
 
 import 'container_hand.dart';
 import 'drawn_hand.dart';
@@ -25,20 +26,21 @@ final radiansPerHour = radians(360 / 12);
 /// A basic analog clock.
 ///
 /// You can do better than this!
-class AnalogClock extends StatefulWidget {
-  const AnalogClock(this.model);
+class LenovoClock extends StatefulWidget {
+  const LenovoClock(this.model);
 
   final ClockModel model;
 
   @override
-  _AnalogClockState createState() => _AnalogClockState();
+  _LenovoClockState createState() => _LenovoClockState();
 }
 
-class _AnalogClockState extends State<AnalogClock> {
+class _LenovoClockState extends State<LenovoClock> {
   var _now = DateTime.now();
   var _temperature = '';
   var _temperatureRange = '';
-  var _condition = '';
+  var _weatherConditionString = '';
+  var _weatherCondition;
   var _location = '';
   Timer _timer;
 
@@ -52,7 +54,7 @@ class _AnalogClockState extends State<AnalogClock> {
   }
 
   @override
-  void didUpdateWidget(AnalogClock oldWidget) {
+  void didUpdateWidget(LenovoClock oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.model != oldWidget.model) {
       oldWidget.model.removeListener(_updateModel);
@@ -70,9 +72,11 @@ class _AnalogClockState extends State<AnalogClock> {
   void _updateModel() {
     setState(() {
       _temperature = widget.model.temperatureString;
-      _temperatureRange = '(${widget.model.low} - ${widget.model.highString})';
-      _condition = widget.model.weatherString;
+      _temperatureRange =
+          '${widget.model.lowString} - ${widget.model.highString}';
+      _weatherConditionString = widget.model.weatherString;
       _location = widget.model.location;
+      _weatherCondition = widget.model.weatherCondition;
     });
   }
 
@@ -86,6 +90,37 @@ class _AnalogClockState extends State<AnalogClock> {
         _updateTime,
       );
     });
+  }
+
+//  cloudy,
+//  foggy,
+//  rainy,
+//  snowy,
+//  sunny,
+//  thunderstorm,
+//  windy,
+  IconData weatherIconData() {
+    switch (_weatherCondition) {
+      case WeatherCondition.cloudy:
+        return WeatherIcons.cloudy;
+
+      case WeatherCondition.foggy:
+        return WeatherIcons.fog;
+      case WeatherCondition.rainy:
+        return WeatherIcons.rain;
+
+      case WeatherCondition.thunderstorm:
+        return WeatherIcons.thunderstorm;
+
+      case WeatherCondition.sunny:
+        return WeatherIcons.day_sunny;
+
+      case WeatherCondition.windy:
+        return WeatherIcons.windy;
+
+      default:
+        return WeatherIcons.na;
+    }
   }
 
   @override
@@ -117,17 +152,48 @@ class _AnalogClockState extends State<AnalogClock> {
     final time = DateFormat.Hms().format(DateTime.now());
     final timeAMPM = DateFormat.jm().format(DateTime.now());
     final weekday = DateFormat.EEEE().format(DateTime.now());
-    final date = DateFormat.yMMMd().format(DateTime.now());
+    final dateFormed = DateFormat.yMMMd().format(DateTime.now());
 
     final weatherInfo = DefaultTextStyle(
-      style: TextStyle(color: customTheme.primaryColor, fontSize: 20),
+      style: TextStyle(color: customTheme.primaryColor, fontSize: 30),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(_temperature),
-          Text(_temperatureRange),
-          Text(_condition),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
           Text(_location),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            _weatherConditionString.toUpperCase(),
+          ),
+          Icon(
+            weatherIconData(),
+            color: Theme.of(context).primaryColor,
+            size: 100,
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Text(
+            _temperature,
+            style: TextStyle(fontSize: 80),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.arrow_drop_down,
+                size: 30,
+                color: Theme.of(context).accentColor,
+              ),
+              Text(_temperatureRange),
+              Icon(
+                Icons.arrow_drop_up,
+                size: 30,
+                color: Theme.of(context).accentColor,
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -174,14 +240,35 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
     );
 
-
-    final dateInfo =
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
-        date,
-        style: TextStyle(color: customTheme.primaryColor, fontSize: 35),
+    var day = DateTime.now().day;
+    var month = DateFormat("MMMM y").format(DateTime.now());
+    final dateInfo = Material(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+          side: BorderSide(
+              color: Theme.of(context).primaryColor.withOpacity(0.5))),
+      elevation: 7,
+      child: DefaultTextStyle(
+        style: TextStyle(
+          color: customTheme.primaryColor,
+          fontSize: 40,
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Text(
+            "$day",
+            style: TextStyle(fontSize: 150),
+          ),
+          Divider(color: Theme.of(context).accentColor,),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              month,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ]),
       ),
-    ]);
+    );
 
     return Semantics.fromProperties(
       properties: SemanticsProperties(
@@ -195,14 +282,17 @@ class _AnalogClockState extends State<AnalogClock> {
             Expanded(
               flex: 1,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: dateInfo,
                   ),
-
+//                  Padding(
+//                    padding: const EdgeInsets.all(8),
+//                    child: temperature,
+//                  ),
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: weatherInfo,

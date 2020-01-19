@@ -357,7 +357,7 @@ class _LenovoClockState extends State<LenovoClock> {
                             height: width / 4.5,
                             decoration: BoxDecoration(
                                 color: customTheme.primaryColor,
-                                borderRadius: BorderRadius.circular(10)),
+                                borderRadius: BorderRadius.circular(10),),
                           ),
                         ),
                       ),

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
 class ClockFace extends StatelessWidget {
+  final double width;
+
+
+  ClockFace(this.width);
+
   @override
   Widget build(BuildContext context) {
-    double size = MediaQuery.of(context).size.height / 1.1;
+    double padding = width * 0.01;
     return Center(
       child: new Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding:  EdgeInsets.all(padding),
         child: new AspectRatio(
           aspectRatio: 1.0,
           child: new Stack(

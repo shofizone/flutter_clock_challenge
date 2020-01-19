@@ -129,153 +129,153 @@ class _LenovoClockState extends State<LenovoClock> {
     }
   }
 
-  Widget dateInfoWidget (BuildContext context, double width){
+  Widget dateInfoWidget(BuildContext context, double width) {
     var dayFontSize = width / 7;
     final dateFormed = DateFormat.yMMMd().format(DateTime.now());
     final day = DateTime.now().day;
     final month = DateFormat("MMMM y").format(DateTime.now());
     final monthYearFontSize = dayFontSize / 6;
     return Material(
-    shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-        side: BorderSide(
-            color: Theme.of(context).accentColor.withOpacity(0.5))),
-    elevation: 7,
-    child: Container(
-      width: width / 5,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+          side: BorderSide(
+              color: Theme.of(context).accentColor.withOpacity(0.5))),
+      elevation: 7,
+      child: Container(
+        width: width / 5,
+        child: DefaultTextStyle(
+          style: TextStyle(
+            color: Theme.of(context).accentColor,
+            fontSize: monthYearFontSize,
+          ),
+          child: Column(
+            children: [
+              Text(
+                "$day",
+                style: TextStyle(fontSize: dayFontSize),
+              ),
+              Divider(
+                color: Theme.of(context).accentColor,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+                child: Text(
+                  month,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget digiClockNWeekday(BuildContext context, double width) {
+    final time24 = DateFormat.Hm().format(DateTime.now());
+    final timeAMPM = DateFormat.jm().format(DateTime.now());
+    final weekday = DateFormat.EEEE().format(DateTime.now());
+    final digitalClockVerticalPadding = width / 8.5;
+    final digitalClockFontSize = width / 11;
+    final weekdayFontSize = width / 20;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        top: digitalClockVerticalPadding,
+        bottom: digitalClockVerticalPadding,
+      ),
       child: DefaultTextStyle(
         style: TextStyle(
-          color: Theme.of(context).accentColor,
-          fontSize: monthYearFontSize,
+          color: Theme.of(context).accentColor.withOpacity(0.6),
+          fontSize: 80,
+          fontFamily: "Roboto",
+
         ),
         child: Column(
-          children: [
-            Text(
-              "$day",
-              style: TextStyle(fontSize: dayFontSize),
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  widget.model.is24HourFormat ? time24 : timeAMPM,
+                  style: TextStyle(
+                    fontSize: digitalClockFontSize,
+                  ),
+                )
+              ],
             ),
-            Divider(
-              color: Theme.of(context).accentColor,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
-              child: Text(
-                month,
-                textAlign: TextAlign.center,
-              ),
+            Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+//              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  weekday.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: weekdayFontSize,
+                  ),
+                )
+              ],
             ),
           ],
         ),
       ),
-    ),
-  );
+    );
   }
 
-  Widget digiClockNWeekday (BuildContext context, double width){
-
-    final time24 = DateFormat.Hm().format(DateTime.now());
-    final timeAMPM = DateFormat.jm().format(DateTime.now());
-    final weekday = DateFormat.EEEE().format(DateTime.now());
-    final digitalClockVerticalPadding = height / 6;
-    final digitalClockFontSize = width / 11;
-    final weekdayFontSize = width / 16;
-
-
-    return Padding(
-    padding: EdgeInsets.only(
-      top: digitalClockVerticalPadding,
-      bottom: digitalClockVerticalPadding,
-    ),
-    child: DefaultTextStyle(
-      style: TextStyle(
-          color: Theme.of(context).accentColor.withGreen(200).withOpacity(0.8),
-          fontSize: 80,
-          fontFamily: "Roboto",
-          fontWeight: FontWeight.bold),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                widget.model.is24HourFormat ? time24 : timeAMPM,
-                style: TextStyle(
-                  fontSize: digitalClockFontSize,
-                ),
-              )
-            ],
-          ),
-          Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-//              crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Text(
-                weekday.toUpperCase(),
-                style: TextStyle(
-                  fontSize: weekdayFontSize,
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
-  }
-  Widget weatherInfo (BuildContext context,double width){
+  Widget weatherInfo(BuildContext context, double width) {
     var dayFontSize = width / 7;
 
     final tempeFontSize = dayFontSize / 3;
     final weatherInfoFontSize = dayFontSize / 7;
     return DefaultTextStyle(
-
-    style: TextStyle(
-      color: Theme.of(context).accentColor,
-      fontSize: weatherInfoFontSize,
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(_location),
-        SizedBox(
-          height: 5,
-        ),
-        Text(
-          _weatherConditionString.toUpperCase(),
-        ),
-        Icon(
-          weatherIconData(),
-          color: Theme.of(context).accentColor,
-          size: weatherInfoFontSize * 3,
-        ),
-        SizedBox(
-          height: weatherInfoFontSize,
-        ),
-        Text(
-          _temperature,
-          style: TextStyle(fontSize: tempeFontSize),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.arrow_drop_down,
-              size: weatherInfoFontSize * 2,
-              color: Theme.of(context).accentColor,
-            ),
-            Text(_temperatureRange),
-            Icon(
-              Icons.arrow_drop_up,
-              size: weatherInfoFontSize * 2,
-              color: Theme.of(context).accentColor,
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
+      style: TextStyle(
+        color: Theme.of(context).accentColor,
+        fontSize: weatherInfoFontSize,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(_location),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            _weatherConditionString.toUpperCase(),
+          ),
+          Icon(
+            weatherIconData(),
+            color: Theme.of(context).accentColor,
+            size: weatherInfoFontSize * 3,
+          ),
+          SizedBox(
+            height: weatherInfoFontSize,
+          ),
+          Text(
+            _temperature,
+            style: TextStyle(fontSize: tempeFontSize),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.arrow_drop_down,
+                size: weatherInfoFontSize * 2,
+                color: Theme.of(context).accentColor,
+              ),
+              Text(_temperatureRange),
+              Icon(
+                Icons.arrow_drop_up,
+                size: weatherInfoFontSize * 2,
+                color: Theme.of(context).accentColor,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     // There are many ways to apply themes to your clock. Some are:
@@ -304,7 +304,6 @@ class _LenovoClockState extends State<LenovoClock> {
 
     final time = DateFormat.Hms().format(DateTime.now());
 
-
     return Semantics.fromProperties(
       properties: SemanticsProperties(
         label: 'Clock with time $time',
@@ -326,7 +325,7 @@ class _LenovoClockState extends State<LenovoClock> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      dateInfoWidget(context,width),
+                      dateInfoWidget(context, width),
                       weatherInfo(context, width),
                     ],
                   ),
@@ -340,53 +339,48 @@ class _LenovoClockState extends State<LenovoClock> {
                     ClockFace(width),
                     // Digital clock
                     Center(
-                      child: digiClockNWeekday(context,width),
+                      child: digiClockNWeekday(context, width),
                     ),
 
                     Opacity(
-                      opacity: 0.8,
+                      opacity: 0.9,
                       child: ContainerHand(
                         color: Colors.transparent,
                         size: 0.6,
                         angleRadians: _now.hour * radiansPerHour +
                             (_now.minute / 60) * radiansPerHour,
                         child: Transform.translate(
-                          offset: Offset(0.0, -width/8),
+                          offset: Offset(0.0, -width / 8),
                           child: Container(
-                            width: width * 0.04,
+                            width: width * 0.035,
                             height: width / 4.5,
                             decoration: BoxDecoration(
-                                color: customTheme.primaryColor,
-                                borderRadius: BorderRadius.circular(10),),
+                              color: customTheme.primaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
                         ),
                       ),
                     ),
 
-                    Opacity(
-                      opacity: 0.8,
-                      child: DrawnHand(
-                        color: customTheme.highlightColor,
-                        thickness: width * 0.02,
-                        size: height/(width/1.15),
-                        angleRadians: _now.minute * radiansPerTick,
-                      ),
+                    DrawnHand(
+                      color: customTheme.highlightColor,
+                      thickness: width * 0.016,
+                      size: height / (width / 1.15),
+                      angleRadians: _now.minute * radiansPerTick,
                     ),
-                    Opacity(
-                      opacity: 0.8,
-                      child: DrawnHand(
-                        color: customTheme.accentColor,
-                        thickness: 4,
-                        size: height/(width/1.3),
-                        angleRadians: _now.second * radiansPerTick,
-                      ),
+                    DrawnHand(
+                      color: customTheme.accentColor,
+                      thickness: 4,
+                      size: height / (width / 1.3),
+                      angleRadians: _now.second * radiansPerTick,
                     ),
 
                     //Center Point
                     new Center(
                       child: new Container(
-                        width: width * 0.045,
-                        height: width * 0.045,
+                        width: width * 0.036,
+                        height:  width * 0.036,
                         decoration: new BoxDecoration(
                           shape: BoxShape.circle,
                           color: Theme.of(context).primaryColor,
